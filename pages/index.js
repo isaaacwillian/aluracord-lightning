@@ -18,8 +18,14 @@ function Title(props) {
   );
 }
 export default function PaginaInicial() {
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState("isaaacwillian");
+  const [bioUser, setBioUser] = useState("a");
   const routing = useRouter();
+
+  fetch(`https://api.github.com/users/${username}`)
+    .then((res) => res.json())
+    .then((json) => setBioUser(json.bio));
+
   return (
     <>
       <Box
@@ -147,6 +153,17 @@ export default function PaginaInicial() {
             >
               {username}
             </Text>
+            <p>
+              {bioUser}
+              <style jsx>{`
+                p {
+                  color: white;
+                  font-size: 10px;
+                  text-align: center;
+                  margin-top: 8px;
+                }
+              `}</style>
+            </p>
           </Box>
           {/* Photo Area */}
         </Box>
