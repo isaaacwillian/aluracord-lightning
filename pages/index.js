@@ -18,8 +18,8 @@ function Title(props) {
   );
 }
 export default function PaginaInicial() {
-  const [username, setUsername] = useState("isaaacwillian");
-  const [bioUser, setBioUser] = useState("a");
+  const [username, setUsername] = useState("");
+  const [bioUser, setBioUser] = useState("");
   const routing = useRouter();
 
   fetch(`https://api.github.com/users/${username}`)
@@ -140,7 +140,11 @@ export default function PaginaInicial() {
                 borderRadius: "50%",
                 marginBottom: "16px",
               }}
-              src={`https://github.com/${username}.png`}
+              src={
+                username.length >= 3
+                  ? `https://github.com/${username}.png`
+                  : `https://images.unsplash.com/photo-1501430845499-9f39b78dd698?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8Y2FsbXxlbnwwfDJ8MHx8&auto=format&fit=crop&w=500&q=60`
+              }
             />
             <Text
               variant="body4"

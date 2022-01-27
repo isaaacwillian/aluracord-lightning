@@ -52,7 +52,7 @@ export default function ChatPage() {
             borderRadius: "5px",
             backgroundColor: "hsla(230, 90%, 10%, 0.700)",
             height: "100%",
-            maxWidth: "95%",
+            maxWidth: "70%",
             maxHeight: "95vh",
             padding: "32px",
           }}
