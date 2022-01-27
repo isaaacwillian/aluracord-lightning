@@ -23,11 +23,10 @@ export default function ChatPage() {
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: appConfig.theme.colors.primary[500],
-        backgroundImage: `url(https://virtualbackgrounds.site/wp-content/uploads/2020/08/the-matrix-digital-rain.jpg)`,
+        backgroundImage: `url(https://images.unsplash.com/photo-1511149755252-35875b273fd6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1169&q=80)`,
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
         backgroundBlendMode: "multiply",
-        color: appConfig.theme.colors.neutrals["000"],
       }}
     >
       <Box
@@ -37,7 +36,7 @@ export default function ChatPage() {
           flex: 1,
           boxShadow: "0 2px 10px 0 rgb(0 0 0 / 20%)",
           borderRadius: "5px",
-          backgroundColor: appConfig.theme.colors.neutrals[700],
+          backgroundColor: "hsla(230, 90%, 10%, 0.700)",
           height: "100%",
           maxWidth: "95%",
           maxHeight: "95vh",
@@ -51,7 +50,7 @@ export default function ChatPage() {
             display: "flex",
             flex: 1,
             height: "80%",
-            backgroundColor: appConfig.theme.colors.neutrals[600],
+            backgroundColor: "hsla(230, 90%, 70%, 0.100)",
             flexDirection: "column",
             borderRadius: "5px",
             padding: "16px",
@@ -85,9 +84,9 @@ export default function ChatPage() {
                 resize: "none",
                 borderRadius: "5px",
                 padding: "6px 8px",
-                backgroundColor: appConfig.theme.colors.neutrals[800],
+                backgroundColor: "hsla(230, 90%, 10%, 0.900)",
                 marginRight: "12px",
-                color: appConfig.theme.colors.neutrals[200],
+                color: appConfig.theme.colors.neutrals["000"],
               }}
             />
           </Box>
@@ -109,12 +108,22 @@ function Header() {
           justifyContent: "space-between",
         }}
       >
-        <Text variant="heading5">Chat</Text>
+        <Text
+          variant="heading5"
+          styleSheet={{
+            color: "white",
+          }}
+        >
+          Chat
+        </Text>
         <Button
           variant="tertiary"
           colorVariant="neutral"
           label="Logout"
           href="/"
+          styleSheet={{
+            color: appConfig.theme.colors.neutrals["200"],
+          }}
         />
       </Box>
     </>
@@ -132,6 +141,7 @@ function MessageList(props) {
         flex: 1,
         color: appConfig.theme.colors.neutrals["000"],
         marginBottom: "16px",
+        overflow: "hidden",
       }}
     >
       {props.messages.map((message) => {
@@ -143,6 +153,7 @@ function MessageList(props) {
               borderRadius: "5px",
               padding: "6px",
               marginBottom: "12px",
+              backgroundColor: "hsla(230, 90%, 10%, 0.500)",
               hover: {
                 backgroundColor: appConfig.theme.colors.neutrals[700],
               },
@@ -161,7 +172,7 @@ function MessageList(props) {
                   display: "inline-block",
                   marginRight: "8px",
                 }}
-                src={`https://github.com/vanessametonini.png`}
+                src={`https://github.com/isaaacwillian.png`}
               />
               <Text tag="strong">{message.from}</Text>
               <Text
