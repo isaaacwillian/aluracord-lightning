@@ -1,28 +1,55 @@
 import { Box, Text, TextField, Image, Button } from "@skynexui/components";
-import React, { useState } from "react";
+import { createClient } from "@supabase/supabase-js";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 import appConfig from "../config.json";
 
 export default function ChatPage() {
-  const [mensagem, setMensagem] = useState("");
+  const supabase = createClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_ANON_KEY
+  );
   const [listMessages, setListMessages] = useState([]);
+  const router = useRouter();
+  const { username } = router.query;
+  const [mensagem, setMensagem] = useState("");
+  useEffect(() => {
+    supabase
+      .from("mensagens")
+      .select("*")
+      .order("id", { ascending: false })
+      .then(({ data }) => {
+        setListMessages(data);
+      });
+  }, []);
 
   function handleNewMessage(newMessage) {
     const message = {
-      id: listMessages.length + 1,
-      from: "isaaacwillian",
-      text: newMessage,
+      de: username,
+      texto: newMessage,
     };
-    setListMessages([message, ...listMessages]);
+    supabase
+      .from("mensagens")
+      .insert([message])
+      .then(({ data }) => {
+        setListMessages([data[0], ...listMessages]);
+      });
     setMensagem("");
   }
 
   function removeMessage(id) {
-    let newListMessages = listMessages.filter((message) => {
-      if (message.id !== id) {
-        return message;
-      }
-    });
-    setListMessages(newListMessages);
+    supabase
+      .from("mensagens")
+      .delete()
+      .match({ id })
+      .then(() => {
+        let newListMessages = listMessages.filter((message) => {
+          if (message.id !== id) {
+            return message;
+          }
+        });
+        setListMessages(newListMessages);
+      });
   }
 
   return (
@@ -110,7 +137,7 @@ export default function ChatPage() {
                   handleNewMessage(mensagem);
                 }}
                 colorVariant="neutral"
-                label={<span class="material-icons">send</span>}
+                label={<span className="material-icons">send</span>}
                 styleSheet={{
                   background: "none",
                   position: "absolute",
@@ -212,9 +239,9 @@ function MessageList(props) {
                   display: "inline-block",
                   marginRight: "8px",
                 }}
-                src={`https://github.com/isaaacwillian.png`}
+                src={`https://github.com/${message.de}.png`}
               />
-              <Text tag="strong">{message.from}</Text>
+              <Text tag="strong">{message.de}</Text>
               <Text
                 styleSheet={{
                   fontSize: "10px",
@@ -230,7 +257,7 @@ function MessageList(props) {
                   props.removeMessage(message.id);
                 }}
                 colorVariant="neutral"
-                label={<span class="material-icons">clear</span>}
+                label={<span className="material-icons">clear</span>}
                 styleSheet={{
                   background: "none",
                   position: "absolute",
@@ -242,7 +269,7 @@ function MessageList(props) {
                 }}
               />
             </Box>
-            {message.text}
+            {message.texto}
           </Text>
         );
       })}

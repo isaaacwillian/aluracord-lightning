@@ -20,11 +20,13 @@ function Title(props) {
 export default function PaginaInicial() {
   const [username, setUsername] = useState("");
   const [bioUser, setBioUser] = useState("");
-  const routing = useRouter();
+  const router = useRouter();
 
-  fetch(`https://api.github.com/users/${username}`)
-    .then((res) => res.json())
-    .then((json) => setBioUser(json.bio));
+  if (username.length > 2) {
+    fetch(`https://api.github.com/users/${username}`)
+      .then((res) => res.json())
+      .then((json) => setBioUser(json.bio));
+  }
 
   return (
     <>
@@ -63,7 +65,7 @@ export default function PaginaInicial() {
             as="form"
             onSubmit={(event) => {
               event.preventDefault();
-              routing.push("/chat");
+              router.push(`/chat?username=${username}`);
             }}
             styleSheet={{
               display: "flex",
