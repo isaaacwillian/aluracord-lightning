@@ -20,6 +20,7 @@ export default function ChatPage() {
       .order("id", { ascending: false })
       .then(({ data }) => {
         setListMessages(data);
+        document.getElementById("load").classList.remove("loading");
       });
   }, []);
 
@@ -86,6 +87,8 @@ export default function ChatPage() {
         >
           <Header />
           <Box
+            id="load"
+            className="loading"
             styleSheet={{
               position: "relative",
               display: "flex",
@@ -193,6 +196,26 @@ function Header() {
 }
 
 function MessageList(props) {
+  const [name, setName] = useState("Isaac Willian");
+  const [repo, setRepo] = useState(0);
+  const [seg, setSeg] = useState(0);
+  function fetchData(username, idClass) {
+    fetch(`https://api.github.com/users/${username}`)
+      .then((res) => res.json())
+      .then((json) => {
+        setName(json.name);
+        setRepo(`Repositórios: ${json.public_repos}`);
+        setSeg(`Seguidores: ${json.followers}`);
+        document.getElementById(idClass).classList.remove("loadingBox");
+      });
+    console.log("working");
+  }
+  function resetData(idClass) {
+    setName("");
+    setRepo("");
+    setSeg("");
+    document.getElementById(idClass).classList.add("loadingBox");
+  }
   return (
     <Box
       tag="ul"
@@ -239,8 +262,53 @@ function MessageList(props) {
                   display: "inline-block",
                   marginRight: "8px",
                 }}
+                onMouseOver={() => {
+                  document.getElementById(`${message.id}box`).style.display =
+                    "block";
+                  fetchData(message.de, `${message.id}box`);
+                }}
+                onMouseOut={() => {
+                  document.getElementById(`${message.id}box`).style.display =
+                    "none";
+                  resetData(`${message.id}box`);
+                }}
                 src={`https://github.com/${message.de}.png`}
               />
+              {/* esse é o box =================== */}
+              <Box
+                id={`${message.id}box`}
+                className="loadingBox"
+                styleSheet={{
+                  width: "200px",
+                  top: "-5px",
+                  left: "20px",
+                  position: "absolute",
+                  display: "none",
+                  backgroundColor: "hsl(200, 20%, 20%)",
+                  borderRadius: "25px",
+                  padding: "5px",
+                }}
+              >
+                <Image
+                  src={`https://github.com/${message.de}.png`}
+                  styleSheet={{
+                    width: "50px",
+                    borderRadius: "50%",
+                    float: "left",
+                    margin: "5px",
+                  }}
+                />
+                <Text>
+                  {`${name}`}
+                  <br />
+                </Text>
+                <Text styleSheet={{ fontSize: "12px" }}>
+                  {repo}
+                  <br />
+                  {seg}
+                </Text>
+              </Box>
+              {/* até aqui ====================== */}
               <Text tag="strong">{message.de}</Text>
               <Text
                 styleSheet={{
