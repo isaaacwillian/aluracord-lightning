@@ -21,6 +21,13 @@ function GlobalStyle() {
         background-repeat: no-repeat;
         background-position: center;
       }
+      *::-webkit-scrollbar {
+        width: 10px;
+      }
+      *::-webkit-scrollbar-thumb {
+        background-color: hsla(230, 90%, 10%, 0.9);
+        border-radius: 40px;
+      }
       /* App fit Height */
       html,
       body,

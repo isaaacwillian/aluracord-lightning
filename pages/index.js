@@ -145,7 +145,7 @@ export default function PaginaInicial() {
               src={
                 username.length >= 3
                   ? `https://github.com/${username}.png`
-                  : `https://images.unsplash.com/photo-1501430845499-9f39b78dd698?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8Y2FsbXxlbnwwfDJ8MHx8&auto=format&fit=crop&w=500&q=60`
+                  : `https://cdn.pixabay.com/photo/2015/10/31/12/00/question-1015308_960_720.jpg`
               }
             />
             <Text

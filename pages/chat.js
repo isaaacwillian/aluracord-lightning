@@ -3,16 +3,28 @@ import { createClient } from "@supabase/supabase-js";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import appConfig from "../config.json";
+import { ButtonSendSticker } from "../src/components/ButtonSendSticker";
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+);
+
+function listenMessagesInRealTime(addMessage) {
+  return supabase
+    .from("mensagens")
+    .on("INSERT", (res) => {
+      addMessage(res.new);
+    })
+    .subscribe();
+}
 
 export default function ChatPage() {
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  );
   const [listMessages, setListMessages] = useState([]);
   const router = useRouter();
   const { username } = router.query;
   const [mensagem, setMensagem] = useState("");
+
   useEffect(() => {
     supabase
       .from("mensagens")
@@ -22,6 +34,11 @@ export default function ChatPage() {
         setListMessages(data);
         document.getElementById("load").classList.remove("loading");
       });
+    listenMessagesInRealTime((newMessage) => {
+      setListMessages((currentListMessages) => {
+        return [newMessage, ...currentListMessages];
+      });
+    });
   }, []);
 
   function handleNewMessage(newMessage) {
@@ -32,9 +49,7 @@ export default function ChatPage() {
     supabase
       .from("mensagens")
       .insert([message])
-      .then(({ data }) => {
-        setListMessages([data[0], ...listMessages]);
-      });
+      .then(({ data }) => {});
     setMensagem("");
   }
 
@@ -80,7 +95,7 @@ export default function ChatPage() {
             borderRadius: "5px",
             backgroundColor: "hsla(230, 90%, 10%, 0.700)",
             height: "100%",
-            maxWidth: "70%",
+            maxWidth: "1100px",
             maxHeight: "95vh",
             padding: "32px",
           }}
@@ -144,10 +159,15 @@ export default function ChatPage() {
                 styleSheet={{
                   background: "none",
                   position: "absolute",
-                  right: "15px",
+                  right: "70px",
                   hover: {
                     backgroundColor: appConfig.theme.colors.primary[400],
                   },
+                }}
+              />
+              <ButtonSendSticker
+                onStickerClick={(sticker) => {
+                  handleNewMessage(":sticker:" + sticker);
                 }}
               />
             </Box>
@@ -218,6 +238,7 @@ function MessageList(props) {
   }
   return (
     <Box
+      id="scrollChat"
       tag="ul"
       styleSheet={{
         overflow: "scroll",
@@ -226,7 +247,7 @@ function MessageList(props) {
         flex: 1,
         color: appConfig.theme.colors.neutrals["000"],
         marginBottom: "16px",
-        overflow: "hidden",
+        overflowX: "hidden",
       }}
     >
       {props.messages.map((message) => {
@@ -279,8 +300,8 @@ function MessageList(props) {
                 id={`${message.id}box`}
                 className="loadingBox"
                 styleSheet={{
-                  width: "200px",
-                  top: "-5px",
+                  minWidth: "200px",
+                  top: "-8px",
                   left: "20px",
                   position: "absolute",
                   display: "none",
@@ -337,7 +358,14 @@ function MessageList(props) {
                 }}
               />
             </Box>
-            {message.texto}
+            {message.texto.startsWith(":sticker:") ? (
+              <Image
+                src={message.texto.replace(":sticker:", "")}
+                styleSheet={{ maxWidth: "120px" }}
+              />
+            ) : (
+              message.texto
+            )}
           </Text>
         );
       })}
