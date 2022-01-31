@@ -20,12 +20,28 @@ function Title(props) {
 export default function PaginaInicial() {
   const [username, setUsername] = useState("");
   const [bioUser, setBioUser] = useState("");
+  const [nameUser, setNameUser] = useState("");
   const router = useRouter();
+  const [validUser, setValidUser] = useState(false);
 
-  if (username.length > 2) {
-    fetch(`https://api.github.com/users/${username}`)
-      .then((res) => res.json())
-      .then((json) => setBioUser(json.bio));
+  function fetchData(username) {
+    if (username.length > 2) {
+      fetch(`https://api.github.com/users/${username}`)
+        .then((res) => res.json())
+        .then((json) => {
+          if (Object.keys(json).length < 4) {
+            setNameUser("");
+            setBioUser("Usuário Inválido");
+            setValidUser(false);
+          } else {
+            setBioUser(json.bio);
+            setNameUser(json.name);
+            document.getElementById("photoArea").classList.remove("invalid");
+            document.getElementById("textField").classList.remove("invalid");
+            setValidUser(true);
+          }
+        });
+    }
   }
 
   return (
@@ -65,7 +81,12 @@ export default function PaginaInicial() {
             as="form"
             onSubmit={(event) => {
               event.preventDefault();
-              router.push(`/chat?username=${username}`);
+              if (validUser) {
+                router.push(`/chat?username=${username}`);
+              } else {
+                document.getElementById("photoArea").classList.add("invalid");
+                document.getElementById("textField").classList.add("invalid");
+              }
             }}
             styleSheet={{
               display: "flex",
@@ -77,7 +98,7 @@ export default function PaginaInicial() {
               marginBottom: "32px",
             }}
           >
-            <Title tag="h2">Boas vindas de volta!</Title>
+            <Title tag="h2">Entre com seu user GitHub!</Title>
             <Text
               variant="body3"
               styleSheet={{
@@ -89,9 +110,10 @@ export default function PaginaInicial() {
             </Text>
 
             <TextField
-              value={username}
+              id="textField"
               onChange={(event) => {
                 setUsername(event.target.value);
+                fetchData(event.target.value);
               }}
               fullWidth
               textFieldColors={{
@@ -122,6 +144,7 @@ export default function PaginaInicial() {
 
           {/* Photo Area */}
           <Box
+            id="photoArea"
             styleSheet={{
               display: "flex",
               flexDirection: "column",
@@ -143,21 +166,22 @@ export default function PaginaInicial() {
                 marginBottom: "16px",
               }}
               src={
-                username.length >= 3
+                validUser
                   ? `https://github.com/${username}.png`
-                  : `https://cdn.pixabay.com/photo/2015/10/31/12/00/question-1015308_960_720.jpg`
+                  : "https://cdn.pixabay.com/photo/2015/10/31/12/00/question-1015308_960_720.jpg"
               }
             />
             <Text
               variant="body4"
               styleSheet={{
-                color: appConfig.theme.colors.neutrals[200],
+                color: appConfig.theme.colors.neutrals["000"],
                 backgroundColor: appConfig.theme.colors.primary[600],
                 padding: "3px 10px",
                 borderRadius: "1000px",
+                fontSize: "14px",
               }}
             >
-              {username}
+              {nameUser}
             </Text>
             <p>
               {bioUser}

@@ -24,6 +24,11 @@ function GlobalStyle() {
       *::-webkit-scrollbar {
         width: 10px;
       }
+      .invalid {
+        border: 1px solid red !important;
+        background-color: rgb(252, 239, 239);
+        box-shadow: 0px 0px 5px 1px rgb(252, 84, 84) !important;
+      }
       *::-webkit-scrollbar-thumb {
         background-color: hsla(230, 90%, 10%, 0.9);
         border-radius: 40px;

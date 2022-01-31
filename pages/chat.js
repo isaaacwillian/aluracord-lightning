@@ -228,7 +228,6 @@ function MessageList(props) {
         setSeg(`Seguidores: ${json.followers}`);
         document.getElementById(idClass).classList.remove("loadingBox");
       });
-    console.log("working");
   }
   function resetData(idClass) {
     setName("");
