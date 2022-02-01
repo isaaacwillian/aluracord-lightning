@@ -1,6 +1,10 @@
 # Aluracord - Lightning
 
-Projeto feito na Imersão React 4 da @alura com @omariosouto e o @peas
+Projeto feito na Imersão React 4 da <a href="https://www.alura.com.br/">Alura</a> com <a href="https://github.com/omariosouto">@omariosouto</a> e o <a href="https://github.com/peas">@peas</a>, utilizando a lib brasileira <a href="https://github.com/skynexui/components">@skynexui</a>.
+
+#
+
+Esse é um chat que utilizando o user do seu GitHub, poderá acessar e se comunicar com outras pessoas
 
 <img width="1000px" src="./readme/readme.gif"/>
 
@@ -38,3 +42,7 @@ npm install
 ```
 npm run dev
 ```
+
+#
+
+Made with ❤️
