@@ -2,6 +2,7 @@ import appConfig from "../config.json";
 import { Box, Button, Text, TextField, Image } from "@skynexui/components";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import useDebounce from "./useDebounce";
 
 function Title(props) {
   const Tag = props.tag || "h1";
@@ -23,6 +24,10 @@ export default function PaginaInicial() {
   const [nameUser, setNameUser] = useState("");
   const router = useRouter();
   const [validUser, setValidUser] = useState(false);
+  const [pic, setPic] = useState(
+    "https://cdn.pixabay.com/photo/2015/10/31/12/00/question-1015308_960_720.jpg"
+  );
+  const debouncedChange = useDebounce(fetchData, 500);
 
   function fetchData(username) {
     if (username.length > 2) {
@@ -30,12 +35,11 @@ export default function PaginaInicial() {
         .then((res) => res.json())
         .then((json) => {
           if (Object.keys(json).length < 4) {
-            setNameUser("");
             setBioUser("Usuário Inválido");
-            setValidUser(false);
           } else {
             setBioUser(json.bio);
             setNameUser(json.name);
+            setPic(`https://github.com/${username}.png`);
             document.getElementById("photoArea").classList.remove("invalid");
             document.getElementById("textField").classList.remove("invalid");
             setValidUser(true);
@@ -113,7 +117,13 @@ export default function PaginaInicial() {
               id="textField"
               onChange={(event) => {
                 setUsername(event.target.value);
-                fetchData(event.target.value);
+                setPic(
+                  "https://cdn.pixabay.com/photo/2015/10/31/12/00/question-1015308_960_720.jpg"
+                );
+                setNameUser("");
+                setBioUser("");
+                setValidUser(false);
+                debouncedChange(event.target.value);
               }}
               fullWidth
               textFieldColors={{
@@ -165,11 +175,7 @@ export default function PaginaInicial() {
                 borderRadius: "50%",
                 marginBottom: "16px",
               }}
-              src={
-                validUser
-                  ? `https://github.com/${username}.png`
-                  : "https://cdn.pixabay.com/photo/2015/10/31/12/00/question-1015308_960_720.jpg"
-              }
+              src={pic}
             />
             <Text
               variant="body4"
