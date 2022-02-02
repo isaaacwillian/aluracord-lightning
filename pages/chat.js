@@ -42,15 +42,17 @@ export default function ChatPage() {
   }, []);
 
   function handleNewMessage(newMessage) {
-    const message = {
-      de: username,
-      texto: newMessage,
-    };
-    supabase
-      .from("mensagens")
-      .insert([message])
-      .then(({ data }) => {});
-    setMensagem("");
+    if (newMessage !== "") {
+      const message = {
+        de: username,
+        texto: newMessage,
+      };
+      supabase
+        .from("mensagens")
+        .insert([message])
+        .then(({ data }) => {});
+      setMensagem("");
+    }
   }
 
   function removeMessage(id) {
