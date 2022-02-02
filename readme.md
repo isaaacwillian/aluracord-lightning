@@ -4,7 +4,7 @@ Projeto feito na Imersão React 4 da <a href="https://www.alura.com.br/">Alura</
 
 #
 
-Esse é um chat que utilizando o user do seu GitHub, poderá acessar e se comunicar com outras pessoas, adicioneis funcionalidades como:
+Esse é um chat que utilizando o user do seu GitHub, poderá acessar e se comunicar com outras pessoas, adicionei funcionalidades como:
 
 - Apenas usuários GitHub permitido
 - Debounce para não fazer requisição à cada letra digitada
