@@ -69,7 +69,7 @@ export default function MessageList(props) {
                         backgroundColor: appConfig.theme.colors.primary[800],
                       },
                       wordBreak: "break-all",
-                      width: "70%",
+                      width: "90%",
                     }
                   : {
                       borderRadius: "5px",
@@ -84,7 +84,7 @@ export default function MessageList(props) {
                       },
                       wordBreak: "break-all",
                       alignItems: "flex-end",
-                      width: "70%",
+                      width: "90%",
                     }
               }
             >
@@ -167,22 +167,24 @@ export default function MessageList(props) {
                 >
                   {new Date().toLocaleDateString()}
                 </Text>
-                <Button
-                  onClick={() => {
-                    props.removeMessage(message.id);
-                  }}
-                  colorVariant="neutral"
-                  label={<span className="material-icons">clear</span>}
-                  styleSheet={{
-                    background: "none",
-                    position: "absolute",
-                    right: "-7px",
-                    hover: {
-                      backgroundColor: appConfig.theme.colors.primary[400],
-                    },
-                    top: "-10px",
-                  }}
-                />
+                {message.de === props.username && (
+                  <Button
+                    onClick={() => {
+                      props.removeMessage(message.id);
+                    }}
+                    colorVariant="neutral"
+                    label={<span className="material-icons">clear</span>}
+                    styleSheet={{
+                      background: "none",
+                      position: "absolute",
+                      right: "-7px",
+                      hover: {
+                        backgroundColor: appConfig.theme.colors.primary[400],
+                      },
+                      top: "-10px",
+                    }}
+                  />
+                )}
               </Box>
               {message.texto.startsWith(":sticker:") ? (
                 <Image
