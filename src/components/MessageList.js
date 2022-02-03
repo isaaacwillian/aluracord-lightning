@@ -39,7 +39,7 @@ export default function MessageList(props) {
       {props.messages.map((message) => {
         return (
           <Box
-            id="oi"
+            key={`${message.id}boxs`}
             styleSheet={
               message.de === props.username
                 ? {
@@ -53,7 +53,6 @@ export default function MessageList(props) {
             }
           >
             <Text
-              key={message.id}
               tag="li"
               styleSheet={
                 message.de !== props.username

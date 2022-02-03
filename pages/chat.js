@@ -11,11 +11,14 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 );
 
-function listenMessagesInRealTime(addMessage) {
+function listenMessagesInRealTime(addMessage, removeMessage) {
   return supabase
     .from("mensagens")
     .on("INSERT", (res) => {
       addMessage(res.new);
+    })
+    .on("DELETE", (res) => {
+      removeMessage(res.old.id);
     })
     .subscribe();
 }
@@ -35,11 +38,23 @@ export default function ChatPage() {
         setListMessages(data);
         document.getElementById("load").classList.remove("loading");
       });
-    listenMessagesInRealTime((newMessage) => {
-      setListMessages((currentListMessages) => {
-        return [newMessage, ...currentListMessages];
-      });
-    });
+    listenMessagesInRealTime(
+      (newMessage) => {
+        setListMessages((currentListMessages) => {
+          return [newMessage, ...currentListMessages];
+        });
+      },
+      (id) => {
+        setListMessages((currentListMessages) => {
+          let newListMessages = currentListMessages.filter((message) => {
+            if (message.id !== id) {
+              return message;
+            }
+          });
+          return newListMessages;
+        });
+      }
+    );
   }, []);
 
   function handleNewMessage(newMessage) {
