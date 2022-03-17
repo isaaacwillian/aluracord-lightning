@@ -2,7 +2,7 @@ import appConfig from "../config.json";
 import { Box, Button, Text, TextField, Image } from "@skynexui/components";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import useDebounce from "./useDebounce";
+import useDebounce from "../hooks/useDebounce";
 
 function Title(props) {
   const Tag = props.tag || "h1";
